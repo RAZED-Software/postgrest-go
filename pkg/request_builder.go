@@ -351,6 +351,16 @@ func (b *SelectRequestBuilder) Range(from, to int) *SelectRequestBuilder {
 	return b
 }
 
+func (b *SelectRequestBuilder) Limit(size int) *SelectRequestBuilder {
+	return b.LimitWithOffset(size, 0)
+}
+
+func (b *SelectRequestBuilder) LimitWithOffset(size int, start int) *SelectRequestBuilder {
+	b.header.Set("Range-Unit", "items")
+	b.header.Set("Range", fmt.Sprintf("%d-%d", start, start+size-1))
+	return b
+}
+
 // SingleRow sets the single row behavior for the SELECT request.
 func (b *SelectRequestBuilder) SingleRow() *SelectRequestBuilder {
 	b.params.Set("single-row", "true")
